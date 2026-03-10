@@ -28,3 +28,34 @@ WHERE p.is_evil = 0
         AND p1.age = p.age
   )
 ORDER BY w.power DESC, p.age DESC;
+
+
+--3 .Query to fetch hacker_id, name, and total challenges created by each student, 
+-- sorted by challenge count descending. Excludes hackers who share a challenge 
+-- count (unless it's the maximum), using subqueries in the HAVING clause.
+
+SELECT h.hacker_id, h.name, COUNT(c.challenge_id) AS challenges_created
+FROM hackers h 
+JOIN challenges c ON h.hacker_id = c.hacker_id
+GROUP BY h.hacker_id, h.name
+HAVING 
+    challenges_created = (
+        SELECT MAX(cnt) 
+        FROM (
+            SELECT COUNT(challenge_id) as cnt 
+            FROM challenges 
+            GROUP BY hacker_id
+        ) as max_counts
+    ) 
+    OR 
+    challenges_created IN (
+        SELECT cnt
+        FROM (
+            SELECT COUNT(challenge_id) as cnt 
+            FROM challenges 
+            GROUP BY hacker_id
+        ) as counts
+        GROUP BY cnt
+        HAVING COUNT(*) = 1
+    )
+ORDER BY challenges_created DESC, h.hacker_id ASC;
