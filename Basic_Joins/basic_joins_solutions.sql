@@ -59,3 +59,18 @@ HAVING
         HAVING COUNT(*) = 1
     )
 ORDER BY challenges_created DESC, h.hacker_id ASC;
+
+
+-- 4. Query to find total score of each hacker by summing their max scores per 
+--    challenge. Uses a subquery in JOIN to get max score per challenge, then 
+--    groups by hacker and filters out zero scores.
+
+SELECT h.hacker_id, h.name, SUM(max_s) as total_score
+FROM hackers h LEFT JOIN (
+    SELECT hacker_id, MAX(score) AS max_s
+    FROM submissions
+    GROUP BY hacker_id, challenge_id
+) AS max_score ON h.hacker_id = max_score.hacker_id
+GROUP BY h.hacker_id, h.name
+having total_score > 0
+order by total_score desc, h.hacker_id asc;
