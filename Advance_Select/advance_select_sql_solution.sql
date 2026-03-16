@@ -26,3 +26,17 @@ FROM (
 GROUP BY rn;
 
 
+-- 3. Write a query to find the node type of Binary Tree ordered by the value of the node. Output one of the following for each node:
+-- Root: If node is root node.
+-- Leaf: If node is leaf node.
+-- Inner: If node is neither root nor leaf node.
+
+SELECT 
+    N,
+    CASE
+        WHEN P IS NULL                                  THEN 'Root'
+        WHEN N NOT IN (SELECT P FROM BST WHERE P IS NOT NULL) THEN 'Leaf'
+        ELSE                                                 'Inner'
+    END AS node_type
+FROM BST
+ORDER BY N;
