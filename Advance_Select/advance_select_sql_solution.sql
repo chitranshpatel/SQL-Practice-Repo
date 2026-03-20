@@ -40,3 +40,19 @@ SELECT
     END AS node_type
 FROM BST
 ORDER BY N;
+
+--4 write a query to print the company_code, founder name, total number of lead managers, total number of 
+-- senior managers, total number of managers, and total number of employees. Order your output by ascending company_code.
+
+select c.company_code, c.founder,
+count(distinct lm.lead_manager_code) as lm_number,
+count(distinct sm.senior_manager_code) as sm_number,
+count(distinct m.manager_code) as m_number,
+count(distinct e.employee_code) as employee_number
+FROM company c
+left JOIN lead_manager lm    ON c.company_code  = lm.company_code
+left JOIN senior_manager sm  ON lm.lead_manager_code = sm.lead_manager_code
+left JOIN manager m          ON sm.senior_manager_code = m.senior_manager_code
+left JOIN employee e         ON m.manager_code  = e.manager_code
+group by c.company_code, c.founder
+order by c.company_code asc;
