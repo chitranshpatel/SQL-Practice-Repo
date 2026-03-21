@@ -14,3 +14,16 @@ SELECT
 FROM DateSequence
 GROUP BY grouping_key
 ORDER BY COUNT(*), MIN(start_date);
+
+
+
+-- 2.Write a query to output the names of those students whose best friends got offered a higher salary than them. 
+-- Names must be ordered by the salary amount offered to the best friends. It is guaranteed that no two students got same salary offer.
+
+SELECT s.name
+FROM students s
+INNER JOIN packages  p  ON s.id       = p.id
+INNER JOIN friends   f  ON s.id       = f.id
+INNER JOIN packages  pp ON f.friend_id = pp.id
+WHERE p.salary < pp.salary
+ORDER BY pp.salary;
