@@ -32,3 +32,14 @@ FROM (
 ) AS no_of_tweets
 GROUP BY tweet_no
 ORDER BY tweet_no;
+
+-- 4. Given a table of candidates and their skills, you're tasked with finding the candidates best suited for an open Data Science job. 
+-- You want to find candidates who are proficient in Python, Tableau, and PostgreSQL.
+
+select candidate_id
+from (SELECT CANDIDATE_ID, count(skill) as no_skill
+FROM CANDIDATES
+WHERE skill IN ('Python', 'Tableau', 'PostgreSQL')
+group by candidate_id) as count_skills
+where no_skill = 3
+order by candidate_id asc;
