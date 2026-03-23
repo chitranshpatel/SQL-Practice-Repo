@@ -15,3 +15,20 @@ WHERE (salary * months) = (
 SELECT ROUND(SUM(lat_n), 4) AS sum_lat
 FROM station
 WHERE lat_n BETWEEN 38.7880 AND 137.2345;
+
+-- 3 Assume you're given a table Twitter tweet data, write a query to obtain a histogram of tweets posted per user in 2022. 
+-- Output the tweet count per user as the bucket and the number of Twitter users who fall into that bucket.
+
+SELECT
+    tweet_no                    AS tweet_count,
+    COUNT(user_id)              AS user_num
+FROM (
+    SELECT
+        user_id,
+        COUNT(tweet_id)         AS tweet_no
+    FROM tweets
+    WHERE EXTRACT(YEAR FROM tweet_date) = 2022
+    GROUP BY user_id
+) AS no_of_tweets
+GROUP BY tweet_no
+ORDER BY tweet_no;
